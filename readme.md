@@ -4,7 +4,7 @@ The application made in bounds of **apache logging**.. The main purpose is to pa
 * origin **country**
 * **IP range** for the **organization** owns the IP
 
-neverthless user can paste **just plain IPs** and retrieve the same data.  
+nevertheless user can paste **just plain IPs** and retrieve the same data.  
 
 This opens the opportunity to create **black list rules** (`/etc/nftables.conf`) for **nftables** (successor of iptables).  
 
