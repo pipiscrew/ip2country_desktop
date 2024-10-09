@@ -10,7 +10,7 @@ This opens the opportunity to create **black list rules** (`/etc/nftables.conf`)
 
 To export the black list rules, the list must contains **unique IPs** or **IP ranges**. The **unique IP ranges** can be filtered when `CTRL pressed` and the `unique IP` button is clicked.  
 
-User is able to drag'n'drop **access.log** to grid for quick load.. Sort by column etc.. Inspired by [http Logs Viewer](https://www.apacheviewer.com/).  
+User is able to drag'n'drop **access.log** to grid for quick load.. Sort by column, delete rows etc.. Inspired by [http Logs Viewer](https://www.apacheviewer.com/).  
 
 > The application requires the **GeoLite2 Free Geolocation Data** to be near the application, the so called file  **GeoLite2-Country.mmdb**, this can downloaded by [here](https://github.com/P3TERX/GeoLite.mmdb) or [here](https://github.com/wp-statistics/GeoLite2-Country) or [here](https://github.com/LOVECHEN/GeoLite.mmdb) or 
 [here](https://dev.maxmind.com/geoip/geolite2-free-geolocation-data).  

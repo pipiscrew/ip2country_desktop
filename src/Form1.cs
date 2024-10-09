@@ -280,5 +280,31 @@ namespace ip2country_desktop
             if (fl[0].ToLower().EndsWith(".log"))
                 LoadData2Grid(File.ReadAllText(fl[0]));
         }
+
+        private void dg_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Delete)
+            {
+                if (dg.Rows.Count != x.Count)
+                {
+                   General.Mes("You can use the 'delete functionality', only when rows are unfiltered.");
+                    return;
+                }
+
+                var uniqueRowIndices = dg.SelectedCells
+                                     .Cast<DataGridViewCell>() // Cast to DataGridViewCell
+                                     .Select(cell => cell.RowIndex) // Select the RowIndex
+                                     .Distinct() // Get unique RowIndices
+                                     .OrderByDescending(index => index) // Sort in descending order
+                                     .ToList(); // Convert to a list
+
+                foreach (int rowIndex in uniqueRowIndices)
+                {
+                    x.Remove((ApacheAccessModel)dg.Rows[rowIndex].DataBoundItem);
+                }
+            }
+
+            this.Text = Application.ProductName + " - rows : " + dg.RowCount;
+        }
     }
 }

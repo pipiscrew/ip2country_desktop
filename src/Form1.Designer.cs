@@ -31,7 +31,12 @@
             this.components = new System.ComponentModel.Container();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
+            this.btnPaste = new System.Windows.Forms.ToolStripButton();
+            this.btnUniqueIP = new System.Windows.Forms.ToolStripButton();
+            this.btnUniqueCountries = new System.Windows.Forms.ToolStripButton();
+            this.btnUniqueRequest = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.btnRemoveFilter = new System.Windows.Forms.ToolStripButton();
             this.dg = new System.Windows.Forms.DataGridView();
             this.ctx = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.btnNftables = new System.Windows.Forms.ToolStripMenuItem();
@@ -42,11 +47,6 @@
             this.btnCheckOnlinedMaxmind = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
-            this.btnPaste = new System.Windows.Forms.ToolStripButton();
-            this.btnUniqueIP = new System.Windows.Forms.ToolStripButton();
-            this.btnUniqueCountries = new System.Windows.Forms.ToolStripButton();
-            this.btnUniqueRequest = new System.Windows.Forms.ToolStripButton();
-            this.btnRemoveFilter = new System.Windows.Forms.ToolStripButton();
             this.toolStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dg)).BeginInit();
             this.ctx.SuspendLayout();
@@ -69,10 +69,57 @@
             this.toolStrip1.TabIndex = 0;
             this.toolStrip1.Text = "toolStrip1";
             // 
+            // btnPaste
+            // 
+            this.btnPaste.Image = global::ip2country_desktop.Properties.Resources.paste32;
+            this.btnPaste.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnPaste.Name = "btnPaste";
+            this.btnPaste.Size = new System.Drawing.Size(74, 36);
+            this.btnPaste.Text = " paste";
+            this.btnPaste.Click += new System.EventHandler(this.btnPaste_Click);
+            // 
+            // btnUniqueIP
+            // 
+            this.btnUniqueIP.Image = global::ip2country_desktop.Properties.Resources.ip32;
+            this.btnUniqueIP.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnUniqueIP.Name = "btnUniqueIP";
+            this.btnUniqueIP.Size = new System.Drawing.Size(93, 36);
+            this.btnUniqueIP.Text = "unique IP";
+            this.btnUniqueIP.ToolTipText = "use CTRL to use IP Range";
+            this.btnUniqueIP.Click += new System.EventHandler(this.btnUniqueIP_Click);
+            // 
+            // btnUniqueCountries
+            // 
+            this.btnUniqueCountries.Image = global::ip2country_desktop.Properties.Resources.country32;
+            this.btnUniqueCountries.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnUniqueCountries.Name = "btnUniqueCountries";
+            this.btnUniqueCountries.Size = new System.Drawing.Size(124, 36);
+            this.btnUniqueCountries.Text = "unique country";
+            this.btnUniqueCountries.Click += new System.EventHandler(this.btnUniqueCountry_Click);
+            // 
+            // btnUniqueRequest
+            // 
+            this.btnUniqueRequest.Image = global::ip2country_desktop.Properties.Resources.request32;
+            this.btnUniqueRequest.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnUniqueRequest.Name = "btnUniqueRequest";
+            this.btnUniqueRequest.Size = new System.Drawing.Size(122, 36);
+            this.btnUniqueRequest.Text = "unique request";
+            this.btnUniqueRequest.Click += new System.EventHandler(this.btnUniqueRequest_Click);
+            // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
             this.toolStripSeparator1.Size = new System.Drawing.Size(6, 39);
+            // 
+            // btnRemoveFilter
+            // 
+            this.btnRemoveFilter.Enabled = false;
+            this.btnRemoveFilter.Image = global::ip2country_desktop.Properties.Resources.removeFilter32;
+            this.btnRemoveFilter.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnRemoveFilter.Name = "btnRemoveFilter";
+            this.btnRemoveFilter.Size = new System.Drawing.Size(110, 36);
+            this.btnRemoveFilter.Text = "remove filter";
+            this.btnRemoveFilter.Click += new System.EventHandler(this.btnRemoveFilter_Click);
             // 
             // dg
             // 
@@ -100,6 +147,7 @@
             this.dg.TabIndex = 3;
             this.dg.DragDrop += new System.Windows.Forms.DragEventHandler(this.dg_DragDrop);
             this.dg.DragEnter += new System.Windows.Forms.DragEventHandler(this.dg_DragEnter);
+            this.dg.KeyDown += new System.Windows.Forms.KeyEventHandler(this.dg_KeyDown);
             this.dg.MouseUp += new System.Windows.Forms.MouseEventHandler(this.dg_MouseUp);
             // 
             // ctx
@@ -170,53 +218,6 @@
             this.toolStripStatusLabel1.Size = new System.Drawing.Size(478, 17);
             this.toolStripStatusLabel1.Text = "Application developed by PipisCrew - Database and Contents Copyright (c) MaxMind " +
     "Inc.";
-            // 
-            // btnPaste
-            // 
-            this.btnPaste.Image = global::ip2country_desktop.Properties.Resources.paste32;
-            this.btnPaste.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btnPaste.Name = "btnPaste";
-            this.btnPaste.Size = new System.Drawing.Size(74, 36);
-            this.btnPaste.Text = " paste";
-            this.btnPaste.Click += new System.EventHandler(this.btnPaste_Click);
-            // 
-            // btnUniqueIP
-            // 
-            this.btnUniqueIP.Image = global::ip2country_desktop.Properties.Resources.ip32;
-            this.btnUniqueIP.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btnUniqueIP.Name = "btnUniqueIP";
-            this.btnUniqueIP.Size = new System.Drawing.Size(93, 36);
-            this.btnUniqueIP.Text = "unique IP";
-            this.btnUniqueIP.ToolTipText = "use CTRL to use IP Range";
-            this.btnUniqueIP.Click += new System.EventHandler(this.btnUniqueIP_Click);
-            // 
-            // btnUniqueCountries
-            // 
-            this.btnUniqueCountries.Image = global::ip2country_desktop.Properties.Resources.country32;
-            this.btnUniqueCountries.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btnUniqueCountries.Name = "btnUniqueCountries";
-            this.btnUniqueCountries.Size = new System.Drawing.Size(124, 36);
-            this.btnUniqueCountries.Text = "unique country";
-            this.btnUniqueCountries.Click += new System.EventHandler(this.btnUniqueCountry_Click);
-            // 
-            // btnUniqueRequest
-            // 
-            this.btnUniqueRequest.Image = global::ip2country_desktop.Properties.Resources.request32;
-            this.btnUniqueRequest.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btnUniqueRequest.Name = "btnUniqueRequest";
-            this.btnUniqueRequest.Size = new System.Drawing.Size(122, 36);
-            this.btnUniqueRequest.Text = "unique request";
-            this.btnUniqueRequest.Click += new System.EventHandler(this.btnUniqueRequest_Click);
-            // 
-            // btnRemoveFilter
-            // 
-            this.btnRemoveFilter.Enabled = false;
-            this.btnRemoveFilter.Image = global::ip2country_desktop.Properties.Resources.removeFilter32;
-            this.btnRemoveFilter.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btnRemoveFilter.Name = "btnRemoveFilter";
-            this.btnRemoveFilter.Size = new System.Drawing.Size(110, 36);
-            this.btnRemoveFilter.Text = "remove filter";
-            this.btnRemoveFilter.Click += new System.EventHandler(this.btnRemoveFilter_Click);
             // 
             // Form1
             // 
