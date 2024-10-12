@@ -15,5 +15,7 @@ namespace ip2country_desktop
         public string size { get; set; }
         public string country { get; set; }
         public string iprange { get; set; }
+        public string asn { get; set; }
+        public string asno { get; set; }
     }
 }

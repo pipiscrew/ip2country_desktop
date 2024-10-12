@@ -54,8 +54,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="apacheAccessModel.cs" />
+    <Compile Include="ApacheAccessModel.cs" />
     <Compile Include="DrawingControl.cs" />
+    <Compile Include="frmGroupBy.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmGroupBy.Designer.cs">
+      <DependentUpon>frmGroupBy.cs</DependentUpon>
+    </Compile>
     <Compile Include="SortableBindingList.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
@@ -68,6 +74,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmGroupBy.resx">
+      <DependentUpon>frmGroupBy.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -109,6 +118,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="main.ico" />
+    <None Include="Resources\groupby32.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

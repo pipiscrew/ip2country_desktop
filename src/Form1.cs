@@ -15,8 +15,16 @@ namespace ip2country_desktop
         {
             InitializeComponent();
 
-            DrawingControl.SetDoubleBuffered(this);
+            //DrawingControl.SetDoubleBuffered(this);
             DrawingControl.SetDoubleBuffered(dg);
+
+            //add class properties to toolbar 'groupby' dropdown
+            var properties = typeof(ApacheAccessModel).GetProperties();
+            foreach (var prop in properties)
+            {
+                btnGroupBy.DropDown.Items.Add(prop.Name);
+                btnGroupBy.DropDown.Items[btnGroupBy.DropDown.Items.Count - 1].Click += btnGroupByDropdown_Click;
+            }
         }
 
         internal enum UniqueIPstate
@@ -36,6 +44,16 @@ namespace ip2country_desktop
 
         private void LoadData2Grid(string txtLines)
         {
+            Cursor = System.Windows.Forms.Cursors.WaitCursor;
+
+            if (dbCountry == null)
+                if (File.Exists("GeoLite2-Country.mmdb"))
+                    dbCountry = new DatabaseReader("GeoLite2-Country.mmdb");
+
+            if (dbASN == null)
+                if (File.Exists("GeoLite2-ASN.mmdb"))
+                    dbASN = new DatabaseReader("GeoLite2-ASN.mmdb");
+
             DrawingControl.SuspendDrawing(dg);
 
             dg.DataSource = null;
@@ -43,7 +61,7 @@ namespace ip2country_desktop
             dg.Columns.Clear();
             btnRemoveFilter.Enabled = false; isUniqueIPactive = UniqueIPstate.notActive;
 
-            string pattern = @"\b(?:\d{1,3}\.){3}\d{1,3}\b";
+            string patternIP = @"\b(?:\d{1,3}\.){3}\d{1,3}\b";
             string patternLine = @"^(?<ip>.*?) - - (?<dt>.*?) ""(?<request>.*?)"" (?<status>.*?) (?<size>.*?)$";
 
             string s2;
@@ -53,7 +71,7 @@ namespace ip2country_desktop
             Match match;
 
             ApacheAccessModel y;
-            string[] country;
+            string[] country; string[] asn;
             foreach (string s in txtLines.Split(new string[] { "\r\n", "\n" }, StringSplitOptions.None))
             {
                 s2 = s.Trim();
@@ -75,17 +93,23 @@ namespace ip2country_desktop
                         country = GetCountryByIP(y.ip);
                         y.country = country[0];
                         y.iprange = country[1];
+                        asn = GetASNByIP(y.ip);
+                        y.asn = asn[0];
+                        y.asno = asn[1];
                     }
                 }
                 else
                 {
-                    match = new Regex(pattern).Match(s2);
+                    match = new Regex(patternIP).Match(s2);
                     if (match.Success)
                     {
                         y.ip = match.Value;
                         country = GetCountryByIP(y.ip);
                         y.country = country[0];
                         y.iprange = country[1];
+                        asn = GetASNByIP(y.ip);
+                        y.asn = asn[0];
+                        y.asno = asn[1];
                     }
                     else
                         y.ip = null;
@@ -98,17 +122,19 @@ namespace ip2country_desktop
             DrawingControl.ResumeDrawing(dg);
 
             this.Text = Application.ProductName + " - rows : " + dg.RowCount;
+
+            Cursor = System.Windows.Forms.Cursors.Default;
         }
 
-        private static DatabaseReader dbIP = null;
+        private static DatabaseReader dbCountry = null;
         private static string[] GetCountryByIP(string ip)
         {
+            if (dbCountry == null)
+                return new string[] { "dbase", "no found" };
+
             try
             {
-                if (dbIP == null)
-                    dbIP = new DatabaseReader(@"GeoLite2-Country.mmdb");
-
-                CountryResponse data = dbIP.Country(ip);
+                CountryResponse data = dbCountry.Country(ip);
 
                 if (data.Country.IsoCode == null)
                 {
@@ -118,7 +144,7 @@ namespace ip2country_desktop
                     if (data.Continent != null)
                         return new string[] { data.Continent.Name, "" };
 
-                    return new string[] { "N/A", "" };
+                    return new string[] { "N/A", "N/A" };
                 }
                 else
                     return new string[] { data.Country.Name, data.Traits.Network.NetworkAddress + "/" + data.Traits.Network.PrefixLength.ToString() };
@@ -132,7 +158,35 @@ namespace ip2country_desktop
                     Environment.Exit(0);
                 }
 
-                return new string[] { "N/A", "" };
+                return new string[] { "N/A", "N/A" };
+            }
+        }
+
+        private static DatabaseReader dbASN = null;
+        private static string[] GetASNByIP(string ip)
+        {
+            if (dbASN == null)
+                return new string[] { "dbase", "no found" };
+
+            try
+            {
+                AsnResponse responseASN;
+
+                if (dbASN.TryAsn(ip, out responseASN))
+                    return new string[] { responseASN.AutonomousSystemOrganization, responseASN.AutonomousSystemNumber.ToStrinX() };
+                else
+                    return new string[] { "N/A", "N/A" };
+
+            }
+            catch (Exception ex)
+            {
+                if (ex is InvalidOperationException || ex is System.IO.FileNotFoundException)
+                {
+                    MessageBox.Show(ex.Message, Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    Environment.Exit(0);
+                }
+
+                return new string[] { "N/A", "N/A" };
             }
         }
 
@@ -203,10 +257,14 @@ namespace ip2country_desktop
 
         private void dg_MouseUp(object sender, MouseEventArgs e)
         {
-            if (e.Button == System.Windows.Forms.MouseButtons.Right)
+            if (e.Button == System.Windows.Forms.MouseButtons.Right && dg.SelectedCells.Count > 0)
             {
                 btnNftables.Enabled = isUniqueIPactive == UniqueIPstate.IP;
                 btnNftablesRange.Enabled = isUniqueIPactive == UniqueIPstate.IPrange;
+
+                string asn = dg.Rows[dg.SelectedCells[0].RowIndex].Cells[7].Value.ToStrinX();
+                btnRemoveASN.Text = string.Format("remove asn '{0}'", asn);
+                btnRemoveASN.Tag = asn;
 
                 ctx.Show(System.Windows.Forms.Cursor.Position);
             }
@@ -287,7 +345,7 @@ namespace ip2country_desktop
             {
                 if (dg.Rows.Count != x.Count)
                 {
-                   General.Mes("You can use the 'delete functionality', only when rows are unfiltered.");
+                    General.Mes("You can use the 'delete functionality', only when rows are unfiltered.");
                     return;
                 }
 
@@ -305,6 +363,58 @@ namespace ip2country_desktop
             }
 
             this.Text = Application.ProductName + " - rows : " + dg.RowCount;
+        }
+
+
+        private void btnGroupByDropdown_Click(object sender, EventArgs e)
+        {
+            if (x == null)
+                return;
+
+            string selectedProperty = (sender as ToolStripDropDownItem).Text;
+            //var groupedData = x.GroupBy(y => y.GetType().GetProperty(selectedProperty).GetValue(y, null))
+            //    .Select(g => new 
+            //    {
+            //        Key = g.Key,
+            //        Count = g.Count()
+            //    })
+            //    .ToList();
+
+            var groupedData = (from y in x
+                               group y by y.GetType().GetProperty(selectedProperty).GetValue(y, null) into g
+                               orderby g.Count() descending
+                               select new Tuple<object, int>(g.Key, g.Count())).ToList();
+
+            frmGroupBy z = new frmGroupBy(new SortableBindingList<Tuple<object, int>>(groupedData), selectedProperty);
+            z.Show();
+        }
+
+        private void btnRemoveASN_Click(object sender, EventArgs e)
+        {
+            if (btnRemoveASN.Tag == null)
+                return;
+
+            Cursor = System.Windows.Forms.Cursors.WaitCursor;
+
+            string asn = btnRemoveASN.Tag.ToStrinX();
+
+            var rows = (from DataGridViewRow row in dg.Rows
+                        where row.Cells[7].Value != null && row.Cells[7].Value.Equals(asn)
+                        select row.Index
+                        ).OrderByDescending(index => index).ToList();
+
+            DrawingControl.SuspendDrawing(dg);
+
+            foreach (int rowIndex in rows)
+            {
+                x.RemoveAt(rowIndex);//((ApacheAccessModel)dg.Rows[rowIndex].DataBoundItem);
+            }
+
+            DrawingControl.ResumeDrawing(dg);
+
+            this.Text = Application.ProductName + " - rows : " + dg.RowCount;
+
+            Cursor = System.Windows.Forms.Cursors.Default;
         }
     }
 }

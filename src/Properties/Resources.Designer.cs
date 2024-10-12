@@ -73,6 +73,16 @@ namespace ip2country_desktop.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap groupby32 {
+            get {
+                object obj = ResourceManager.GetObject("groupby32", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap ip32 {
             get {
                 object obj = ResourceManager.GetObject("ip32", resourceCulture);
