@@ -272,14 +272,14 @@ namespace ip2country_desktop
 
         private void btnNftables_Click(object sender, EventArgs e)
         {
-            string template = "                ip saddr {0} drop";
+            string template = "                ip saddr {0} drop #{1}";
 
             StringBuilder sb = new StringBuilder();
 
             int destCell = (isUniqueIPactive == UniqueIPstate.IP ? 0 : 6);
             foreach (DataGridViewRow r in dg.Rows)
             {
-                sb.AppendLine(string.Format(template, r.Cells[destCell].Value.ToStrinX()));
+                sb.AppendLine(string.Format(template, r.Cells[destCell].Value.ToStrinX(), r.Cells[7].Value.ToStrinX()));
             }
 
             General.Copy2Clipboard(sb.ToString());
