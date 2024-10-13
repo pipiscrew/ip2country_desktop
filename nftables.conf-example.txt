@@ -1,0 +1,61 @@
+#!/usr/sbin/nft -f
+
+flush ruleset
+
+# replace the /etc/nftables.conf with this file. then everytime updated use : sudo nft -f /etc/nftables.conf
+
+# Define the IPv4 filter table and set
+table ip filter {
+    # Create a set for IPv4 addresses
+	set blacklist {
+			type ipv4_addr
+			flags interval
+			auto-merge
+			elements = { //add here IP ranges for BAN**************************
+						1.86.86.0/24,
+						1.97.73.0/24,
+			}
+	}
+
+    # Create input chain
+    chain input {
+        type filter hook input priority 0; policy accept;  # Default policy to accept
+        # Drop packets from IPs in the set
+        ip saddr @blacklist drop;
+    }
+
+    # Create forward chain
+    chain forward {
+        type filter hook forward priority 0; policy accept;  # Default policy to accept
+        # Drop packets from IPs in the set
+        ip saddr @blacklist drop;
+    }
+}
+
+# Define the IPv6 filter table and set
+table ip6 filter {
+    # Create a set for IPv6 addresses
+	set blacklist {
+			type ipv6_addr
+			flags interval
+			auto-merge
+			elements = { //add here IP ranges for BAN**************************
+						1:bc8:701::/48,
+						1:4ba0:c000::/35,
+			}
+    }
+
+    # Create input chain
+    chain input {
+        type filter hook input priority 0; policy accept;  # Default policy to accept
+        # Drop packets from IPs in the set
+        ip6 saddr @blacklist drop;
+    }
+
+    # Create forward chain
+    chain forward {
+        type filter hook forward priority 0; policy accept;  # Default policy to accept
+        # Drop packets from IPs in the set
+        ip6 saddr @blacklist drop;
+    }
+}

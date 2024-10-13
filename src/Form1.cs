@@ -261,10 +261,14 @@ namespace ip2country_desktop
             {
                 btnNftables.Enabled = isUniqueIPactive == UniqueIPstate.IP;
                 btnNftablesRange.Enabled = isUniqueIPactive == UniqueIPstate.IPrange;
-
+                
                 string asn = dg.Rows[dg.SelectedCells[0].RowIndex].Cells[7].Value.ToStrinX();
                 btnRemoveASN.Text = string.Format("remove asn '{0}'", asn);
-                btnRemoveASN.Tag = asn;
+                btnRemoveASN.Tag = dg.Rows[dg.SelectedCells[0].RowIndex].DataBoundItem;
+
+                string country = dg.Rows[dg.SelectedCells[0].RowIndex].Cells[5].Value.ToStrinX();
+                btnRemoveCountry.Text = string.Format("remove country '{0}'", country);
+                btnRemoveCountry.Tag = dg.Rows[dg.SelectedCells[0].RowIndex].DataBoundItem;
 
                 ctx.Show(System.Windows.Forms.Cursor.Position);
             }
@@ -272,17 +276,25 @@ namespace ip2country_desktop
 
         private void btnNftables_Click(object sender, EventArgs e)
         {
-            string template = "                ip saddr {0} drop #{1}";
+            //string template = "                ip saddr {0} drop #{1}";
+            string template = "\t\t\t\t\t\t{0}, #{1}";
 
-            StringBuilder sb = new StringBuilder();
+            StringBuilder sbIPv4 = new StringBuilder();
+            StringBuilder sbIPv6 = new StringBuilder();
 
             int destCell = (isUniqueIPactive == UniqueIPstate.IP ? 0 : 6);
+
+            string iprange = string.Empty;
             foreach (DataGridViewRow r in dg.Rows)
             {
-                sb.AppendLine(string.Format(template, r.Cells[destCell].Value.ToStrinX(), r.Cells[7].Value.ToStrinX()));
+                iprange = r.Cells[6].Value.ToStrinX();
+                if (iprange.Contains("::"))
+                    sbIPv6.AppendLine(string.Format(template, r.Cells[destCell].Value.ToStrinX(), r.Cells[7].Value.ToStrinX()));
+                else
+                    sbIPv4.AppendLine(string.Format(template, r.Cells[destCell].Value.ToStrinX(), r.Cells[7].Value.ToStrinX()));
             }
 
-            General.Copy2Clipboard(sb.ToString());
+            General.Copy2Clipboard(sbIPv4.Append(sbIPv6).ToString());
         }
 
         private void btnRemoveFilter_Click(object sender, EventArgs e)
@@ -388,18 +400,35 @@ namespace ip2country_desktop
             frmGroupBy z = new frmGroupBy(new SortableBindingList<Tuple<object, int>>(groupedData), selectedProperty);
             z.Show();
         }
-
+        
         private void btnRemoveASN_Click(object sender, EventArgs e)
         {
             if (btnRemoveASN.Tag == null)
                 return;
 
+            RemoveWhere(7, (btnRemoveASN.Tag as ApacheAccessModel).asn);
+        }
+
+        private void btnRemoveCountry_Click(object sender, EventArgs e)
+        {
+            if (btnRemoveCountry.Tag == null)
+                return;
+
+            RemoveWhere(5, (btnRemoveCountry.Tag as ApacheAccessModel).country);
+        }
+
+        private void RemoveWhere(int dgColIndex , string item)
+        {
+            if (dg.Rows.Count != x.Count)
+            {
+                General.Mes("You can use the 'remove functionality', only when rows are unfiltered.");
+                return;
+            }
+
             Cursor = System.Windows.Forms.Cursors.WaitCursor;
 
-            string asn = btnRemoveASN.Tag.ToStrinX();
-
             var rows = (from DataGridViewRow row in dg.Rows
-                        where row.Cells[7].Value != null && row.Cells[7].Value.Equals(asn)
+                        where row.Cells[dgColIndex].Value != null && row.Cells[dgColIndex].Value.Equals(item)
                         select row.Index
                         ).OrderByDescending(index => index).ToList();
 
