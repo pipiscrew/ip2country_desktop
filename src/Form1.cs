@@ -325,6 +325,9 @@ namespace ip2country_desktop
                 case "btnCheckOnlinedMaxmind":
                     domain = "https://www.maxmind.com/en/geoip-demo/#";
                     break;
+                case "btnCheckOnlineWhoer":
+                    domain = "https://whoer.com/ip/";
+                    break;
             }
 
             if (dg.SelectedCells[0].Value != null)

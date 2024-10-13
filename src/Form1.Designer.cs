@@ -44,13 +44,14 @@
             this.btnNftablesRange = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.btnRemoveASN = new System.Windows.Forms.ToolStripMenuItem();
+            this.btnRemoveCountry = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.btnCheckOnlineMyIP = new System.Windows.Forms.ToolStripMenuItem();
             this.btnCheckOnlineIP2location = new System.Windows.Forms.ToolStripMenuItem();
             this.btnCheckOnlinedMaxmind = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
-            this.btnRemoveCountry = new System.Windows.Forms.ToolStripMenuItem();
+            this.btnCheckOnlineWhoer = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dg)).BeginInit();
             this.ctx.SuspendLayout();
@@ -172,11 +173,12 @@
             this.btnRemoveASN,
             this.btnRemoveCountry,
             this.toolStripSeparator3,
+            this.btnCheckOnlineWhoer,
             this.btnCheckOnlineMyIP,
             this.btnCheckOnlineIP2location,
             this.btnCheckOnlinedMaxmind});
             this.ctx.Name = "ctx";
-            this.ctx.Size = new System.Drawing.Size(260, 192);
+            this.ctx.Size = new System.Drawing.Size(260, 214);
             // 
             // btnNftables
             // 
@@ -203,6 +205,13 @@
             this.btnRemoveASN.Size = new System.Drawing.Size(259, 22);
             this.btnRemoveASN.Text = "remove";
             this.btnRemoveASN.Click += new System.EventHandler(this.btnRemoveASN_Click);
+            // 
+            // btnRemoveCountry
+            // 
+            this.btnRemoveCountry.Name = "btnRemoveCountry";
+            this.btnRemoveCountry.Size = new System.Drawing.Size(259, 22);
+            this.btnRemoveCountry.Text = "remove";
+            this.btnRemoveCountry.Click += new System.EventHandler(this.btnRemoveCountry_Click);
             // 
             // toolStripSeparator3
             // 
@@ -247,12 +256,12 @@
             this.toolStripStatusLabel1.Text = "Application developed by PipisCrew - Database and Contents Copyright (c) MaxMind " +
     "Inc.";
             // 
-            // btnRemoveCountry
+            // btnCheckOnlineWhoer
             // 
-            this.btnRemoveCountry.Name = "btnRemoveCountry";
-            this.btnRemoveCountry.Size = new System.Drawing.Size(259, 22);
-            this.btnRemoveCountry.Text = "remove";
-            this.btnRemoveCountry.Click += new System.EventHandler(this.btnRemoveCountry_Click);
+            this.btnCheckOnlineWhoer.Name = "btnCheckOnlineWhoer";
+            this.btnCheckOnlineWhoer.Size = new System.Drawing.Size(259, 22);
+            this.btnCheckOnlineWhoer.Text = "check online whoer";
+            this.btnCheckOnlineWhoer.Click += new System.EventHandler(this.btnCheckOnline_Click);
             // 
             // Form1
             // 
@@ -301,6 +310,7 @@
         private System.Windows.Forms.ToolStripMenuItem btnRemoveASN;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
         private System.Windows.Forms.ToolStripMenuItem btnRemoveCountry;
+        private System.Windows.Forms.ToolStripMenuItem btnCheckOnlineWhoer;
     }
 }
 
