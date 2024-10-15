@@ -20,6 +20,10 @@ User is able to drag'n'drop **access.log** to grid for quick load.. Sort by colu
 
 &nbsp;
 
+> [!NOTE]
+> when using reverse proxy, nftables and others cant be used, use traditional apache block.  
+
+
 ## This project uses the following 3rd-party dependencies :
 * [MaxMind.Db](https://www.nuget.org/packages/MaxMind.Db/3.0.0)
 * [MaxMind.GeoIP2](https://www.nuget.org/packages/MaxMind.GeoIP2/4.1.0)

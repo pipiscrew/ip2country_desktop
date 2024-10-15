@@ -270,6 +270,10 @@ namespace ip2country_desktop
                 btnRemoveCountry.Text = string.Format("remove country '{0}'", country);
                 btnRemoveCountry.Tag = dg.Rows[dg.SelectedCells[0].RowIndex].DataBoundItem;
 
+                string status = dg.Rows[dg.SelectedCells[0].RowIndex].Cells[3].Value.ToStrinX();
+                btnRemoveStatus.Text = string.Format("remove status '{0}'", status);
+                btnRemoveStatus.Tag = dg.Rows[dg.SelectedCells[0].RowIndex].DataBoundItem;
+
                 ctx.Show(System.Windows.Forms.Cursor.Position);
             }
         }
@@ -420,6 +424,14 @@ namespace ip2country_desktop
             RemoveWhere(5, (btnRemoveCountry.Tag as ApacheAccessModel).country);
         }
 
+        private void btnRemoveStatus_Click(object sender, EventArgs e)
+        {
+            if (btnRemoveStatus.Tag == null)
+                return;
+
+            RemoveWhere(3, (btnRemoveCountry.Tag as ApacheAccessModel).status);
+        }
+
         private void RemoveWhere(int dgColIndex, string item)
         {
             if (dg.Rows.Count != x.Count)
@@ -469,6 +481,6 @@ namespace ip2country_desktop
             }
 
             General.Copy2Clipboard(sbIPv4.Append(sbIPv6).ToString());
-        }
+        }        
     }
 }
