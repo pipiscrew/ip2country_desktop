@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.btnPaste = new System.Windows.Forms.ToolStripButton();
             this.btnUniqueIP = new System.Windows.Forms.ToolStripButton();
@@ -46,12 +46,15 @@
             this.btnRemoveASN = new System.Windows.Forms.ToolStripMenuItem();
             this.btnRemoveCountry = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+            this.btnCheckOnlineWhoer = new System.Windows.Forms.ToolStripMenuItem();
             this.btnCheckOnlineMyIP = new System.Windows.Forms.ToolStripMenuItem();
             this.btnCheckOnlineIP2location = new System.Windows.Forms.ToolStripMenuItem();
             this.btnCheckOnlinedMaxmind = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
-            this.btnCheckOnlineWhoer = new System.Windows.Forms.ToolStripMenuItem();
+            this.btnApache = new System.Windows.Forms.ToolStripMenuItem();
+            this.btnApacheRange = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dg)).BeginInit();
             this.ctx.SuspendLayout();
@@ -149,8 +152,8 @@
             this.dg.Name = "dg";
             this.dg.ReadOnly = true;
             this.dg.RowHeadersVisible = false;
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.dg.RowsDefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.dg.RowsDefaultCellStyle = dataGridViewCellStyle3;
             this.dg.RowTemplate.DefaultCellStyle.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.dg.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
             this.dg.ShowCellErrors = false;
@@ -167,6 +170,9 @@
             // ctx
             // 
             this.ctx.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.btnApache,
+            this.btnApacheRange,
+            this.toolStripSeparator4,
             this.btnNftables,
             this.btnNftablesRange,
             this.toolStripSeparator2,
@@ -178,64 +184,71 @@
             this.btnCheckOnlineIP2location,
             this.btnCheckOnlinedMaxmind});
             this.ctx.Name = "ctx";
-            this.ctx.Size = new System.Drawing.Size(260, 214);
+            this.ctx.Size = new System.Drawing.Size(252, 264);
             // 
             // btnNftables
             // 
             this.btnNftables.Name = "btnNftables";
-            this.btnNftables.Size = new System.Drawing.Size(259, 22);
-            this.btnNftables.Text = "copy nftables IP block rule(s)";
+            this.btnNftables.Size = new System.Drawing.Size(251, 22);
+            this.btnNftables.Text = "copy nftables IP block rules";
             this.btnNftables.Click += new System.EventHandler(this.btnNftables_Click);
             // 
             // btnNftablesRange
             // 
             this.btnNftablesRange.Name = "btnNftablesRange";
-            this.btnNftablesRange.Size = new System.Drawing.Size(259, 22);
-            this.btnNftablesRange.Text = "copy nftables IP range block rule(s)";
+            this.btnNftablesRange.Size = new System.Drawing.Size(251, 22);
+            this.btnNftablesRange.Text = "copy nftables IP range block rules";
             this.btnNftablesRange.Click += new System.EventHandler(this.btnNftables_Click);
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(256, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(248, 6);
             // 
             // btnRemoveASN
             // 
             this.btnRemoveASN.Name = "btnRemoveASN";
-            this.btnRemoveASN.Size = new System.Drawing.Size(259, 22);
+            this.btnRemoveASN.Size = new System.Drawing.Size(251, 22);
             this.btnRemoveASN.Text = "remove";
             this.btnRemoveASN.Click += new System.EventHandler(this.btnRemoveASN_Click);
             // 
             // btnRemoveCountry
             // 
             this.btnRemoveCountry.Name = "btnRemoveCountry";
-            this.btnRemoveCountry.Size = new System.Drawing.Size(259, 22);
+            this.btnRemoveCountry.Size = new System.Drawing.Size(251, 22);
             this.btnRemoveCountry.Text = "remove";
             this.btnRemoveCountry.Click += new System.EventHandler(this.btnRemoveCountry_Click);
             // 
             // toolStripSeparator3
             // 
             this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(256, 6);
+            this.toolStripSeparator3.Size = new System.Drawing.Size(248, 6);
+            // 
+            // btnCheckOnlineWhoer
+            // 
+            this.btnCheckOnlineWhoer.Name = "btnCheckOnlineWhoer";
+            this.btnCheckOnlineWhoer.Size = new System.Drawing.Size(251, 22);
+            this.btnCheckOnlineWhoer.Text = "check online whoer";
+            this.btnCheckOnlineWhoer.Click += new System.EventHandler(this.btnCheckOnline_Click);
             // 
             // btnCheckOnlineMyIP
             // 
             this.btnCheckOnlineMyIP.Name = "btnCheckOnlineMyIP";
-            this.btnCheckOnlineMyIP.Size = new System.Drawing.Size(259, 22);
+            this.btnCheckOnlineMyIP.Size = new System.Drawing.Size(251, 22);
             this.btnCheckOnlineMyIP.Text = "check online myip.ms";
             this.btnCheckOnlineMyIP.Click += new System.EventHandler(this.btnCheckOnline_Click);
             // 
             // btnCheckOnlineIP2location
             // 
             this.btnCheckOnlineIP2location.Name = "btnCheckOnlineIP2location";
-            this.btnCheckOnlineIP2location.Size = new System.Drawing.Size(259, 22);
+            this.btnCheckOnlineIP2location.Size = new System.Drawing.Size(251, 22);
             this.btnCheckOnlineIP2location.Text = "check online ip2location";
             this.btnCheckOnlineIP2location.Click += new System.EventHandler(this.btnCheckOnline_Click);
             // 
             // btnCheckOnlinedMaxmind
             // 
             this.btnCheckOnlinedMaxmind.Name = "btnCheckOnlinedMaxmind";
-            this.btnCheckOnlinedMaxmind.Size = new System.Drawing.Size(259, 22);
+            this.btnCheckOnlinedMaxmind.Size = new System.Drawing.Size(251, 22);
             this.btnCheckOnlinedMaxmind.Text = "check online maxmind";
             this.btnCheckOnlinedMaxmind.Click += new System.EventHandler(this.btnCheckOnline_Click);
             // 
@@ -256,12 +269,24 @@
             this.toolStripStatusLabel1.Text = "Application developed by PipisCrew - Database and Contents Copyright (c) MaxMind " +
     "Inc.";
             // 
-            // btnCheckOnlineWhoer
+            // btnApache
             // 
-            this.btnCheckOnlineWhoer.Name = "btnCheckOnlineWhoer";
-            this.btnCheckOnlineWhoer.Size = new System.Drawing.Size(259, 22);
-            this.btnCheckOnlineWhoer.Text = "check online whoer";
-            this.btnCheckOnlineWhoer.Click += new System.EventHandler(this.btnCheckOnline_Click);
+            this.btnApache.Name = "btnApache";
+            this.btnApache.Size = new System.Drawing.Size(251, 22);
+            this.btnApache.Text = "copy apache IP block rules";
+            this.btnApache.Click += new System.EventHandler(this.btnApache_Click);
+            // 
+            // btnApacheRange
+            // 
+            this.btnApacheRange.Name = "btnApacheRange";
+            this.btnApacheRange.Size = new System.Drawing.Size(251, 22);
+            this.btnApacheRange.Text = "copy apache IP range block rules";
+            this.btnApacheRange.Click += new System.EventHandler(this.btnApache_Click);
+            // 
+            // toolStripSeparator4
+            // 
+            this.toolStripSeparator4.Name = "toolStripSeparator4";
+            this.toolStripSeparator4.Size = new System.Drawing.Size(248, 6);
             // 
             // Form1
             // 
@@ -311,6 +336,9 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
         private System.Windows.Forms.ToolStripMenuItem btnRemoveCountry;
         private System.Windows.Forms.ToolStripMenuItem btnCheckOnlineWhoer;
+        private System.Windows.Forms.ToolStripMenuItem btnApache;
+        private System.Windows.Forms.ToolStripMenuItem btnApacheRange;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
     }
 }
 

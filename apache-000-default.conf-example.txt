@@ -1,0 +1,21 @@
+# /etc/apache2/sites-available/000-default.conf
+<VirtualHost *:8080>
+        ServerName your_domain.xyz
+        DocumentRoot /var/www
+        # mod_remoteip
+        RemoteIPHeader CF-Connecting-IP
+        # log file location
+        CustomLog /var/myLogs/access.log common
+        ErrorLog /var/myLogs/error.log
+
+    <Directory /var/www>
+        <RequireAll>
+            Require all granted
+            Require not ip 80.75.212.0/24
+            Require not ip 5.181.188.0/22
+            Require not ip 122.116.0.0/15
+            Require not ip 2001:41d0:701:1100::/64
+            Require not ip 120.48.0.0/15
+        </RequireAll>
+    </Directory>
+</VirtualHost>

@@ -259,9 +259,9 @@ namespace ip2country_desktop
         {
             if (e.Button == System.Windows.Forms.MouseButtons.Right && dg.SelectedCells.Count > 0)
             {
-                btnNftables.Enabled = isUniqueIPactive == UniqueIPstate.IP;
-                btnNftablesRange.Enabled = isUniqueIPactive == UniqueIPstate.IPrange;
-                
+                btnApache.Enabled = btnNftables.Enabled = isUniqueIPactive == UniqueIPstate.IP;
+                btnApacheRange.Enabled = btnNftablesRange.Enabled = isUniqueIPactive == UniqueIPstate.IPrange;
+
                 string asn = dg.Rows[dg.SelectedCells[0].RowIndex].Cells[7].Value.ToStrinX();
                 btnRemoveASN.Text = string.Format("remove asn '{0}'", asn);
                 btnRemoveASN.Tag = dg.Rows[dg.SelectedCells[0].RowIndex].DataBoundItem;
@@ -403,7 +403,7 @@ namespace ip2country_desktop
             frmGroupBy z = new frmGroupBy(new SortableBindingList<Tuple<object, int>>(groupedData), selectedProperty);
             z.Show();
         }
-        
+
         private void btnRemoveASN_Click(object sender, EventArgs e)
         {
             if (btnRemoveASN.Tag == null)
@@ -420,7 +420,7 @@ namespace ip2country_desktop
             RemoveWhere(5, (btnRemoveCountry.Tag as ApacheAccessModel).country);
         }
 
-        private void RemoveWhere(int dgColIndex , string item)
+        private void RemoveWhere(int dgColIndex, string item)
         {
             if (dg.Rows.Count != x.Count)
             {
@@ -447,6 +447,28 @@ namespace ip2country_desktop
             this.Text = Application.ProductName + " - rows : " + dg.RowCount;
 
             Cursor = System.Windows.Forms.Cursors.Default;
+        }
+
+        private void btnApache_Click(object sender, EventArgs e)
+        {
+            string template = "            Require not ip {0}";
+
+            StringBuilder sbIPv4 = new StringBuilder();
+            StringBuilder sbIPv6 = new StringBuilder();
+
+            int destCell = (isUniqueIPactive == UniqueIPstate.IP ? 0 : 6);
+
+            string iprange = string.Empty;
+            foreach (DataGridViewRow r in dg.Rows)
+            {
+                iprange = r.Cells[6].Value.ToStrinX();
+                if (iprange.Contains("::"))
+                    sbIPv6.AppendLine(string.Format(template, r.Cells[destCell].Value.ToStrinX(), r.Cells[7].Value.ToStrinX()));
+                else
+                    sbIPv4.AppendLine(string.Format(template, r.Cells[destCell].Value.ToStrinX(), r.Cells[7].Value.ToStrinX()));
+            }
+
+            General.Copy2Clipboard(sbIPv4.Append(sbIPv6).ToString());
         }
     }
 }
