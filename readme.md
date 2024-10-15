@@ -21,7 +21,7 @@ User is able to drag'n'drop **access.log** to grid for quick load.. Sort by colu
 &nbsp;
 
 > [!NOTE]
-> when using 3rd party reverse proxy (cloudflare), nftables and others cant be used, use traditional apache block.  
+> when using 3rd party **reverse proxy** (ex. cloudflare), **nftables** and others **cannot** be used, use traditional apache block. When on apache you have to use **mod_remoteip**.  
 
 &nbsp;
 
