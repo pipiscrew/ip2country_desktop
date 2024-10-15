@@ -21,8 +21,9 @@ User is able to drag'n'drop **access.log** to grid for quick load.. Sort by colu
 &nbsp;
 
 > [!NOTE]
-> when using reverse proxy, nftables and others cant be used, use traditional apache block.  
+> when using 3rd party reverse proxy (cloudflare), nftables and others cant be used, use traditional apache block.  
 
+&nbsp;
 
 ## This project uses the following 3rd-party dependencies :
 * [MaxMind.Db](https://www.nuget.org/packages/MaxMind.Db/3.0.0)
