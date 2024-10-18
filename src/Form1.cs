@@ -62,22 +62,28 @@ namespace ip2country_desktop
             dg.Columns.Clear();
             btnRemoveFilter.Enabled = false; isUniqueIPactive = UniqueIPstate.notActive;
 
+            //regex to match default error.log (ipv4 only)
+            string patternLineError = @"(?<=\[client\s)([\d\.]+)";
+            Regex regexERROR = new Regex(patternLineError, RegexOptions.Compiled);
+            Match matchError;
+
             //regex to match IPv4 or IPv6 -- previous IPv4 -> //string patternIP = @"\b(?:\d{1,3}\.){3}\d{1,3}\b";
             string patternIP = @"\b(?:\d{1,3}\.){3}\d{1,3}\b|(?:[0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}|(?:[0-9a-fA-F]{1,4}:){1,7}:|(?:[0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|(?:[0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|(?:[0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|(?:[0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|(?:[0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]{0,1}[0-9]){0,1}[0-9])\.){3}(25[0-5]|(2[0-4]|1{0,1}[0-9]{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]{0,1}[0-9]){0,1}[0-9])\.){3}(25[0-5]|(2[0-4]|1{0-4}|1{0,1}[0-9]{0,1}[0-9]){0,1}[0-9])\b";
             Regex regexIP = new Regex(patternIP, RegexOptions.Compiled);
             Match matchIP;
 
-            string s2;
-
-            x = new SortableBindingList<ApacheAccessModel>();
-
+            //regex to match default access.log
             string patternLine = @"^(?<ip>.*?) - - (?<dt>.*?) ""(?<request>.*?)"" (?<status>.*?) (?<size>.*?)$";
             Regex regex = new Regex(patternLine, RegexOptions.Compiled);
             Match match;
 
+            string s2;
+            x = new SortableBindingList<ApacheAccessModel>();
+
             ApacheAccessModel y;
             string[] country; string[] asn;
-            foreach (string s in txtLines.Split(new string[] { "\r\n", "\n" }, StringSplitOptions.None))
+
+            foreach (string s in txtLines.Split(new string[] { "\r\n", "\n" }, StringSplitOptions.RemoveEmptyEntries))
             {
                 s2 = s.Trim();
 
@@ -91,6 +97,7 @@ namespace ip2country_desktop
                     if (match.Success)
                     {
                         matchIP = regexIP.Match(match.Groups["ip"].Value);
+
                         if (matchIP.Success)
                         {
                             y.ip = matchIP.Value;
@@ -99,6 +106,21 @@ namespace ip2country_desktop
                             y.request = match.Groups["request"].Value;
                             y.status = match.Groups["status"].Value;
                             y.size = match.Groups["size"].Value;
+                            country = GetCountryByIP(y.ip);
+                            y.country = country[0];
+                            y.iprange = country[1];
+                            asn = GetASNByIP(y.ip);
+                            y.asn = asn[0];
+                            y.asno = asn[1];
+                        }
+                    }
+                    else
+                    {     //check if is error.log
+                        matchError = regexERROR.Match(s2);
+
+                        if (matchError.Success)
+                        {
+                            y.ip = matchError.Value;
                             country = GetCountryByIP(y.ip);
                             y.country = country[0];
                             y.iprange = country[1];
