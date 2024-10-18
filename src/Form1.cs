@@ -37,6 +37,7 @@ namespace ip2country_desktop
         private SortableBindingList<ApacheAccessModel> x;
         private UniqueIPstate isUniqueIPactive = UniqueIPstate.notActive;
 
+
         private void btnPaste_Click(object sender, EventArgs e)
         {
             LoadData2Grid(General.GetFromClipboard());
@@ -61,12 +62,16 @@ namespace ip2country_desktop
             dg.Columns.Clear();
             btnRemoveFilter.Enabled = false; isUniqueIPactive = UniqueIPstate.notActive;
 
-            string patternIP = @"\b(?:\d{1,3}\.){3}\d{1,3}\b";
-            string patternLine = @"^(?<ip>.*?) - - (?<dt>.*?) ""(?<request>.*?)"" (?<status>.*?) (?<size>.*?)$";
+            //regex to match IPv4 or IPv6 -- previous IPv4 -> //string patternIP = @"\b(?:\d{1,3}\.){3}\d{1,3}\b";
+            string patternIP = @"\b(?:\d{1,3}\.){3}\d{1,3}\b|(?:[0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}|(?:[0-9a-fA-F]{1,4}:){1,7}:|(?:[0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|(?:[0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|(?:[0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|(?:[0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|(?:[0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]{0,1}[0-9]){0,1}[0-9])\.){3}(25[0-5]|(2[0-4]|1{0,1}[0-9]{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]{0,1}[0-9]){0,1}[0-9])\.){3}(25[0-5]|(2[0-4]|1{0-4}|1{0,1}[0-9]{0,1}[0-9]){0,1}[0-9])\b";
+            Regex regexIP = new Regex(patternIP, RegexOptions.Compiled);
+            Match matchIP;
 
             string s2;
 
             x = new SortableBindingList<ApacheAccessModel>();
+
+            string patternLine = @"^(?<ip>.*?) - - (?<dt>.*?) ""(?<request>.*?)"" (?<status>.*?) (?<size>.*?)$";
             Regex regex = new Regex(patternLine, RegexOptions.Compiled);
             Match match;
 
@@ -78,32 +83,37 @@ namespace ip2country_desktop
 
                 y = new ApacheAccessModel();
 
-                if (s2.Length > 20)
+                if (s2.Length > 40)
                 {
 
                     match = regex.Match(s2);
 
                     if (match.Success)
                     {
-                        y.ip = match.Groups["ip"].Value;
-                        y.date = match.Groups["dt"].Value;
-                        y.request = match.Groups["request"].Value;
-                        y.status = match.Groups["status"].Value;
-                        y.size = match.Groups["size"].Value;
-                        country = GetCountryByIP(y.ip);
-                        y.country = country[0];
-                        y.iprange = country[1];
-                        asn = GetASNByIP(y.ip);
-                        y.asn = asn[0];
-                        y.asno = asn[1];
+                        matchIP = regexIP.Match(match.Groups["ip"].Value);
+                        if (matchIP.Success)
+                        {
+                            y.ip = matchIP.Value;
+                            //y.ip = match.Groups["ip"].Value;
+                            y.date = match.Groups["dt"].Value;
+                            y.request = match.Groups["request"].Value;
+                            y.status = match.Groups["status"].Value;
+                            y.size = match.Groups["size"].Value;
+                            country = GetCountryByIP(y.ip);
+                            y.country = country[0];
+                            y.iprange = country[1];
+                            asn = GetASNByIP(y.ip);
+                            y.asn = asn[0];
+                            y.asno = asn[1];
+                        }
                     }
                 }
                 else
                 {
-                    match = new Regex(patternIP).Match(s2);
-                    if (match.Success)
+                    matchIP = regexIP.Match(s2);
+                    if (matchIP.Success)
                     {
-                        y.ip = match.Value;
+                        y.ip = matchIP.Value;
                         country = GetCountryByIP(y.ip);
                         y.country = country[0];
                         y.iprange = country[1];
@@ -354,7 +364,7 @@ namespace ip2country_desktop
         {
             string[] fl = (string[])e.Data.GetData(DataFormats.FileDrop, false);
 
-            if (fl[0].ToLower().EndsWith(".log"))
+            if (fl[0].ToLower().EndsWith(".log") || fl[0].ToLower().EndsWith(".txt"))
                 LoadData2Grid(File.ReadAllText(fl[0]));
         }
 
@@ -481,6 +491,6 @@ namespace ip2country_desktop
             }
 
             General.Copy2Clipboard(sbIPv4.Append(sbIPv6).ToString());
-        }        
+        }
     }
 }
